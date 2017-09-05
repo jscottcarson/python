@@ -1,0 +1,17 @@
+# Retrieve key from body of SQS message
+import boto3
+import json
+
+# Define your SQS Queue Region
+client = boto3.resource('sqs', region_name='region_name')
+
+# Define your SQS Queue
+queue = client.get_queue_by_name(QueueName="queue_name")
+
+# Loop through message and load body into a variable. You can specify Max Number of Messages here
+for message in queue.receive_messages(MaxNumberOfMessages=1):
+    # process message body
+    result = json.loads(message.body)
+
+# Reach into the json and extract desired key
+print result['Records'][0]['s3']['object']['key']
